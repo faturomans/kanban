@@ -9,31 +9,12 @@
     <title>@yield('pageTitle')</title>
 </head>
 <body>
-    <!-- Memperbarui HTML code dibawah -->
-    <div class="container">
-      <div class="sidebar">
-        <div class="sidebar-container">
-          <a class="sidebar-link" href="#">
-            <span class="material-icons sidebar-icon">home</span>
-            <p class="sidebar-text">Home</p>
-          </a>
-          <a class="sidebar-link" href="#">
-            <span class="material-icons sidebar-icon">list</span>
-            <p class="sidebar-text">Task List</p>
-          </a>
-        </div>
-      </div>
-      <div class="main">
-        @yield('main')
-      </div>
-  </div>
   <div class="container">
     @include('partials.sidebar')
     <div class="main">
       @yield('main')
     </div>
   </div>
-
   </body>
 </html>
 
