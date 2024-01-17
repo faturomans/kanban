@@ -43,11 +43,15 @@
             @default
               Not Started
           @endswitch
-        </div>
-        <!-- Ditambahkan -->
-        <div>
-            <a href="{{ route('tasks.edit', ['id' => $task->id]) }}">Edit</a>
-        </div>
+            </div>
+            <!-- Ditambahkan -->
+            <div>
+                <a href="{{ route('tasks.edit', ['id' => $task->id]) }}">Edit</a>
+            </div>
+            <!-- Tambahkan Tautan Delete -->
+            <div>
+                <a href="{{ route('tasks.delete', ['id' => $task->id]) }}">Delete</a>
+            </div>
         </div>
     @endforeach
   </div>

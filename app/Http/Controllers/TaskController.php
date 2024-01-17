@@ -9,10 +9,10 @@ class TaskController extends Controller
 {
     private $tasks;
 
-    public function __construct()
-    {
+    // public function __construct()
+    // {
 
-    }
+    // }
 
     public function index()
     {
@@ -29,7 +29,7 @@ class TaskController extends Controller
         return view('tasks.create', ['pageTitle' => $pageTitle]);
     }
 
-    // Tambahkan method store()
+
     public function store(Request $request)
     {
         $request->validate(
@@ -57,8 +57,36 @@ class TaskController extends Controller
     public function edit($id)
     {
         $pageTitle = 'Edit Task';
-        $task = Task::find($id); // Diperbarui
-
+        $task = Task::find($id);
         return view('tasks.edit', ['pageTitle' => $pageTitle, 'task' => $task]);
+    }
+
+
+    public function update(Request $request, $id)
+    {
+
+        $this->validate($request, [
+            'name' => 'required',
+            'detail' => 'required',
+            'due_date' => 'required|date',
+            'status' => 'required|in:not_started,in_progress,in_review,completed',
+        ]);
+
+        $task = Task::find($id);
+        $task->name = $request->input('name');
+        $task->detail = $request->input('detail');
+        $task->due_date = $request->input('due_date');
+        $task->status = $request->input('status');
+        $task->save();
+
+        return redirect()->route('tasks.index')->with('success', 'Task updated successfully');
+    }
+
+
+    public function delete($id)
+    {
+        $task = Task::find($id);
+        $task->delete();
+        return redirect()->route('tasks.index');
     }
 }
