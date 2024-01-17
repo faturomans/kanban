@@ -33,4 +33,6 @@ Route::prefix('tasks')
         Route::put('{id}/update', 'update')->name('update');
         Route::get('{id}/delete', 'delete')->name('delete');
         Route::get('progress', 'progress')->name('progress');
+        // Tambahkan route untuk /move
+        Route::patch('{id}/move', 'move')->name('move');
     });
