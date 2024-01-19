@@ -22,7 +22,14 @@ Route::get('/', function () {
     return view('home');
 })->name('home'); // name ditambahkan
 
-Route::get('/tasks/', [TaskController::class, 'index'])->name('tasks.index'); // name ditambahkan
-// Ditambahkan
-Route::get('/tasks/{id}/edit', [TaskController::class, 'edit'])->name('tasks.edit');
-Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create');
+Route::prefix('tasks')
+    ->name('tasks.')
+    ->controller(TaskController::class)
+    ->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/create', 'create')->name('create');
+        Route::post('/', 'store')->name('store');
+        Route::get('{id}/edit', 'edit')->name('edit');
+        Route::put('{id}/update', 'update')->name('update');
+        Route::get('{id}/delete', 'delete')->name('delete');
+    });
