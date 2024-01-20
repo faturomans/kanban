@@ -1,7 +1,5 @@
 @extends('layouts.master')
-
 @section('pageTitle', $pageTitle)
-
 @section('main')
   <div class="form-container">
     <h1 class="form-title">{{ $pageTitle }}</h1>
@@ -49,7 +47,7 @@
             <option @if(old('status') == 'completed') selected @endif value="completed">
               Completed
             </option>
-          </select>
+        </select>
         <!-- Menampilkan pesan error untuk status -->
         @error('status')
           <div class="alert-danger">{{ $message }}</div>

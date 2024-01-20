@@ -22,9 +22,11 @@
     @foreach ($tasks as $index => $task)
       <div class="table-body">
         <div class="table-body-task-name">
-          <span class="material-icons @if ($task->status == 'completed') check-icon-completed @else check-icon @endif" >
-            check_circle
-          </span>
+            @if ($task->status == 'completed')
+            <div class="material-icons task-progress-card-top-checked" onclick="submitForm('{{ route('tasks.complete', ['id' => $task->id]) }}')">check_circle</div>
+        @else
+            <div class="material-icons check-icon" onclick="submitForm('{{ route('tasks.complete', ['id' => $task->id]) }}')">check_circle</div>
+        @endif
           {{ $task->name }}
         </div>
         <div class="table-body-detail"> {{ $task->detail }} </div>
@@ -56,3 +58,27 @@
     @endforeach
   </div>
   @endsection
+
+  <script>
+    function submitForm(route) {
+        var form = document.createElement('form');
+        form.setAttribute('method', 'POST');
+        form.setAttribute('action', route);
+
+        var hiddenField = document.createElement('input');
+        hiddenField.setAttribute('type', 'hidden');
+        hiddenField.setAttribute('name', '_method');
+        hiddenField.setAttribute('value', 'PATCH');
+
+        var csrfField = document.createElement('input');
+        csrfField.setAttribute('type', 'hidden');
+        csrfField.setAttribute('name', '_token');
+        csrfField.setAttribute('value', '{{ csrf_token() }}');
+
+        form.appendChild(hiddenField);
+        form.appendChild(csrfField);
+
+        document.body.appendChild(form);
+        form.submit();
+    }
+</script>

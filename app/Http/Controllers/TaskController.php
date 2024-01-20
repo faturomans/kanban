@@ -13,12 +13,6 @@ class TaskController extends Controller
     // {
 
     // }
-
-    public function index()
-    {
-
-    }
-
     public function index()
     {
         $pageTitle = 'Task List'; // Ditambahkan
@@ -31,12 +25,9 @@ class TaskController extends Controller
 
     public function create()
     {
-        $pageTitle = 'Task List'; // Ditambahkan
-        $tasks = $this->tasks;
-        return view('tasks.create', [
-            'pageTitle' => $pageTitle, //Ditambahkan
-            'tasks' => $tasks,
-        ]);
+        $task = new Task(); // Inisialisasi objek tugas baru
+        $pageTitle = "Create Task"; // Sesuaikan dengan judul halaman yang sesuai
+        return view('tasks.create', compact('pageTitle', 'task'));
     }
 
     public function edit($id)
@@ -45,18 +36,13 @@ class TaskController extends Controller
         $task = Task::find($id); // Diperbarui
 
         return view('tasks.edit', ['pageTitle' => $pageTitle, 'task' => $task]);
-=======
+
         $pageTitle = 'Task List'; // Ditambahkan
         $tasks = Task::all(); // Diperbarui
         return view('tasks.index', [
             'pageTitle' => $pageTitle, //Ditambahkan
             'tasks' => $tasks,
         ]);
-    }
-    public function create()
-    {
-        $pageTitle = 'Create Task';
-        return view('tasks.create', ['pageTitle' => $pageTitle]);
     }
 
 
@@ -84,12 +70,6 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
-    public function edit($id)
-    {
-        $pageTitle = 'Edit Task';
-        $task = Task::find($id);
-        return view('tasks.edit', ['pageTitle' => $pageTitle, 'task' => $task]);
-    }
 
 
     public function update(Request $request, $id)
@@ -118,6 +98,64 @@ class TaskController extends Controller
         $task = Task::find($id);
         $task->delete();
         return redirect()->route('tasks.index');
->>>>>>> Develop_task_crud_operations
     }
+
+    public function progress()
+    {
+        $title = 'Taks Progress';
+        $allTasks = Task::all();
+        $filteredTasks = $allTasks->groupBy('status');
+        $tasks = [
+            Task::STATUS_NOT_STARTED => $filteredTasks->get(
+                Task::STATUS_NOT_STARTED, []
+            ),
+            Task::STATUS_IN_PROGRESS => $filteredTasks->get(
+                Task::STATUS_IN_PROGRESS, []
+            ),
+            Task::STATUS_IN_REVIEW => $filteredTasks->get(
+                Task::STATUS_IN_REVIEW, []
+            ),
+            Task::STATUS_COMPLETED => $filteredTasks->get(
+                Task::STATUS_COMPLETED, []
+            ),
+        ];
+        return view('tasks.progress', [
+            'pageTitle' => $title,
+            'tasks' => $tasks,
+        ]);
+    }
+
+    public function move(int $id, Request $request)
+    {
+        $task = Task::findOrFail($id);
+
+        $task->update([
+            'status' => $request->status,
+        ]);
+
+        return redirect()->route('tasks.progress');
+    }
+
+    public function complete($id)
+    {
+        $task = Task::findOrFail($id);
+        $task->status = 'completed';
+        $task->save();
+
+        return redirect()->route('tasks.index')->with('success', 'Task marked as completed successfully.');
+    }
+
+    public function completee($id)
+    {
+        $task = Task::findOrFail($id);
+        $task->status = 'completed';
+        $task->save();
+
+        return redirect()->route('tasks.progress')->with('success', 'Task marked as completed successfully.');
+    }
+
+
+
+
+
 }
