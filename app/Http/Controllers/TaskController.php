@@ -15,32 +15,33 @@ class TaskController extends Controller
     // }
     public function index()
     {
-        $pageTitle = 'Task List'; // Ditambahkan
-        $tasks = Task::all(); // Diperbarui
+        $pageTitle = 'Task List';
+        $tasks = Task::all();
         return view('tasks.index', [
-            'pageTitle' => $pageTitle, //Ditambahkan
+            'pageTitle' => $pageTitle,
             'tasks' => $tasks,
         ]);
     }
 
-    public function create()
+    public function create( Request $request)
     {
-        $task = new Task(); // Inisialisasi objek tugas baru
-        $pageTitle = "Create Task"; // Sesuaikan dengan judul halaman yang sesuai
-        return view('tasks.create', compact('pageTitle', 'task'));
+        $task = new Task();
+        $id = $request->input('id');
+        $status = $request->input('status');
+        $task = Task::find($id);
+        $pageTitle = "Create Task";
+        return view('tasks.create', compact('pageTitle', 'task' , 'status'));
     }
 
     public function edit($id)
     {
         $pageTitle = 'Edit Task';
-        $task = Task::find($id); // Diperbarui
-
+        $task = Task::find($id);
         return view('tasks.edit', ['pageTitle' => $pageTitle, 'task' => $task]);
-
-        $pageTitle = 'Task List'; // Ditambahkan
-        $tasks = Task::all(); // Diperbarui
+        $pageTitle = 'Task List';
+        $tasks = Task::all();
         return view('tasks.index', [
-            'pageTitle' => $pageTitle, //Ditambahkan
+            'pageTitle' => $pageTitle,
             'tasks' => $tasks,
         ]);
     }
