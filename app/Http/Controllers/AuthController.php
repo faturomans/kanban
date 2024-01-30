@@ -50,26 +50,32 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    $request->validate(
-        [
-            'email' => ['required', 'email'],
-            'password' => 'required',
-        ],
-        $request->all()
-    );
+    {
+        $request->validate(
+            [
+                'email' => ['required', 'email'],
+                'password' => 'required',
+            ],
+            $request->all()
+        );
 
-    $credentials = $request->only('email', 'password');
+        $credentials = $request->only('email', 'password');
 
-    if (Auth::attempt($credentials)) {
-        return redirect()->route('home');
+        if (Auth::attempt($credentials)) {
+            return redirect()->route('home');
+        }
+
+        return redirect()
+        ->back()
+        ->withInput($request->only('email'))
+        ->withErrors([
+            'email' => 'The email was not found.',
+        ]);
     }
 
-    return redirect()
-    ->back()
-    ->withInput($request->only('email'))
-    ->withErrors([
-        'email' => 'The email was not found.',
-    ]);
-}
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('auth.login');
+    }
 }
