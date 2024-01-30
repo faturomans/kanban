@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaskController;
 
 /*
@@ -24,6 +25,7 @@ Route::get('/', function () {
 
 Route::prefix('tasks')
     ->name('tasks.')
+    ->middleware('auth') // Ditambahkan
     ->controller(TaskController::class)
     ->group(function () {
         Route::get('/', 'index')->name('index');
@@ -36,8 +38,29 @@ Route::prefix('tasks')
         Route::patch('{id}/move', 'move')->name('move');
         Route::patch('{id}/complete', 'complete')->name('complete');
         Route::patch('{id}/completee', 'completee')->name('completee');
+    });
 
+    // Route::name('auth.')
+    // ->controller(AuthController::class)
+    // ->group(function () {
+    //     Route::get('signup', 'signupForm')->name('signupForm');
+    //     Route::post('signup', 'signup')->name('signup');
+    //     Route::get('login', 'loginForm')->name('loginForm');
+    //     Route::post('login', 'login')->name('login');
+    //     Route::post('logout', 'logout')->name('logout'); // Ditambahkan
+    // });
 
+    Route::name('auth.')
+    ->controller(AuthController::class)
+    ->group(function () {
+        Route::middleware('guest')->group(function () {
+            Route::get('signup', 'signupForm')->name('signupForm');
+            Route::post('signup', 'signup')->name('signup');
+            Route::get('login', 'loginForm')->name('loginForm');
+            Route::post('login', 'login')->name('login');
+        });
 
-
+        Route::middleware('auth')->group(function () {
+            Route::post('logout', 'logout')->name('logout');
+        });
     });
