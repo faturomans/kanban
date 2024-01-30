@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TaskController;
 
 /*
@@ -36,8 +37,11 @@ Route::prefix('tasks')
         Route::patch('{id}/move', 'move')->name('move');
         Route::patch('{id}/complete', 'complete')->name('complete');
         Route::patch('{id}/completee', 'completee')->name('completee');
+    });
 
-
-
-
+    Route::name('auth.')
+    ->controller(AuthController::class)
+    ->group(function () {
+        Route::get('signup', 'signupForm')->name('signupForm');
+        Route::post('signup', 'signup')->name('signup');
     });
