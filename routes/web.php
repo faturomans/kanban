@@ -19,9 +19,9 @@ use App\Http\Controllers\TaskController;
 //     return view('welcome');
 // });
 
-Route::get('/', function () {
-    return view('home');
-})->name('home'); // name ditambahkan
+Route::get('/', [TaskController::class, 'home'])
+    ->name('home')
+    ->middleware('auth');
 
 Route::prefix('tasks')
     ->name('tasks.')

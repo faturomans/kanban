@@ -16,7 +16,7 @@
 
       <div class="task-summary-list">
         <span class="material-icons">list</span>
-        <h2>You still have 5 tasks left</h2>
+        <h2>You still have {{ $uncompleted_count }} tasks left</h2>
       </div>
     </div>
   </div>

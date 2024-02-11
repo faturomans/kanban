@@ -13,10 +13,12 @@
         </a>
     </div>
     <div class="task-list-table-head">
-      <div class="task-list-header-task-name">Task Name</div>
-      <div class="task-list-header-detail">Detail</div>
-      <div class="task-list-header-due-date">Due Date</div>
-      <div class="task-list-header-progress">Progress</div>
+        <div class="task-list-header-task-name">Task Name</div>
+        <div class="task-list-header-detail">Detail</div>
+        <div class="task-list-header-due-date">Due Date</div>
+        <div class="task-list-header-progress">Progress</div>
+        <!-- Tambahkan code ini -->
+        <div class="task-list-header-owner-name">Owner</div>
     </div>
 
     @foreach ($tasks as $index => $task)
@@ -46,19 +48,44 @@
               Not Started
           @endswitch
             </div>
+            <div class="table-body-owner-name">{{ $task->user->name }}</div>
             <!-- Ditambahkan -->
             <div>
-                <a href="{{ route('tasks.edit', ['id' => $task->id]) }}">Edit</a>
+                <a href="{{ route('tasks.edit', ['id' => $task->id]) }}">
+                    ✏️
+                </a>
             </div>
-            <!-- Tambahkan Tautan Delete -->
+
+            <!-- Tambahkan Tautan Delete dengan Unicode Trash Icon -->
             <div>
-                <a href="{{ route('tasks.delete', ['id' => $task->id]) }}">Delete</a>
+                <a href="{{ route('tasks.delete', ['id' => $task->id]) }}">
+                    🗑️
+                </a>
             </div>
         </div>
+
     @endforeach
   </div>
   @endsection
+<style>
+    .task-list-header-owner-name {
+        padding: 16px;
+        width: 15%;
+    }
+    .table-body-progress {
+        width: 15%;
+        padding: 16px;
+        border-right: 1px solid #d8d8d8; /* Ditambahkan */
+    }
 
+        .table-body-owner-name {
+        width: 15%;
+        padding: 16px;
+}
+    a {
+        text-decoration: none;
+    }
+</style>
   <script>
     function submitForm(route) {
         var form = document.createElement('form');

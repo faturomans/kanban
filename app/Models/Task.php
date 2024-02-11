@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Task extends Model
 {
@@ -14,5 +15,16 @@ class Task extends Model
     public const STATUS_IN_REVIEW = 'in_review';
     public const STATUS_COMPLETED = 'completed';
 
-    protected $fillable = ['name', 'detail', 'due_date', 'status'];
+    protected $fillable = [
+        'name',
+        'detail',
+        'due_date',
+        'status',
+        'user_id', // Ditambahkan
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }
