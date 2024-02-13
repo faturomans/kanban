@@ -56,7 +56,7 @@ class AuthController extends Controller
                 'email' => ['required', 'email'],
                 'password' => 'required',
             ],
-            $request->all()
+            // $request->all()
         );
 
         $credentials = $request->only('email', 'password');
@@ -69,7 +69,7 @@ class AuthController extends Controller
         ->back()
         ->withInput($request->only('email'))
         ->withErrors([
-            'email' => 'The email was not found.',
+            'email' => 'Incorrect email or password.',
         ]);
     }
 

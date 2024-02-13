@@ -5,10 +5,7 @@
     @else
         <div class="material-icons check-icon" onclick="submitForm('{{ route('tasks.completee', ['id' => $task->id]) }}')">check_circle</div>
     @endif
-        {{-- <a href="{{ route('tasks.edit', ['id' => $task->id]) }}" class="material-icons task-progress-card-top-edit">more_vert</a> --}}
-        <!-- Tombol untuk menambahkan detail tugas -->
-        <a href="{{ $task->status ? route('tasks.create', ['id' => $task->id, 'status' => $task->status]) : '#' }}" class="material-icons task-progress-card-top-edit">add</a>
-
+        <a href="{{ route('tasks.edit', ['id' => $task->id]) }}" class="material-icons task-progress-card-top-edit">more_vert</a>
     </div>
     <p class="task-progress-card-title">{{ $task->name }}</p>
     <div>
