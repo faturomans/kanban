@@ -38,6 +38,7 @@ class TaskController extends Controller
     {
         $pageTitle = 'Edit Task';
         $task = Task::find($id);
+        Gate::authorize('update', $task); // Ditambahkan
         return view('tasks.edit', ['pageTitle' => $pageTitle, 'task' => $task]);
         $pageTitle = 'Task List';
         $tasks = Task::all();
@@ -84,6 +85,7 @@ class TaskController extends Controller
         ]);
 
         $task = Task::find($id);
+        Gate::authorize('update', $task); // Ditambahkan
         $task->name = $request->input('name');
         $task->detail = $request->input('detail');
         $task->due_date = $request->input('due_date');
@@ -97,12 +99,14 @@ class TaskController extends Controller
     public function delete($id)
     {
         $task = Task::find($id);
+        Gate::authorize('delete', $task); // Ditambahkan
         $pageTitle = "Delete Task";
         return view('tasks.delete', compact('pageTitle', 'task'));
     }
     public function destroy($id)
     {
         $task = Task::find($id);
+        Gate::authorize('delete', $task); // Ditambahkan
         $task->delete();
         return redirect()->route('tasks.index');
     }
