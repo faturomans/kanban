@@ -1,11 +1,13 @@
 <div class="task-progress-card">
     <div class="task-progress-card-left">
-    @if ($task->status == 'completed')
-        <div class="material-icons task-progress-card-top-checked" onclick="submitForm('{{ route('tasks.completee', ['id' => $task->id]) }}')">check_circle</div>
-    @else
-        <div class="material-icons check-icon" onclick="submitForm('{{ route('tasks.completee', ['id' => $task->id]) }}')">check_circle</div>
-    @endif
-        <a href="{{ route('tasks.edit', ['id' => $task->id]) }}" class="material-icons task-progress-card-top-edit">more_vert</a>
+    @can('update', $task)
+        @if ($task->status == 'completed')
+            <div class="material-icons task-progress-card-top-checked" onclick="submitForm('{{ route('tasks.completee', ['id' => $task->id]) }}')">check_circle</div>
+        @else
+            <div class="material-icons check-icon" onclick="submitForm('{{ route('tasks.completee', ['id' => $task->id]) }}')">check_circle</div>
+        @endif
+            <a href="{{ route('tasks.edit', ['id' => $task->id]) }}" class="material-icons task-progress-card-top-edit">more_vert</a>
+    @endcan
     </div>
     <p class="task-progress-card-title">{{ $task->name }}</p>
     <div>
@@ -22,7 +24,9 @@
             <form action="{{ route('tasks.move', ['id' => $task->id, 'status' => $leftStatus]) }}" method="POST">
             @method('patch')
             @csrf
-            <button class="material-icons">chevron_left</button>
+            @can('update', $task)
+                <button class="material-icons">chevron_left</button>
+            @endcan
             </form>
          @endif
 
@@ -31,7 +35,9 @@
             method="POST">
             @method('patch')
             @csrf
-            <button class="material-icons">chevron_right</button>
+            @can('update', $task)
+                <button class="material-icons">chevron_right</button>
+            @endcan
             </form>
         @endif
     </div>

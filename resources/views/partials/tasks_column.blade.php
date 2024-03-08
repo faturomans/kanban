@@ -3,7 +3,9 @@
     @foreach ($tasks as $task)
         <div class="container">
             <h2>{{ $title }}</h2> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            <a href="{{ $task->status ? route('tasks.create', ['id' => $task->id, 'status' => $task->status]) : '#' }}" class="material-icons task-progress-card-top-editt">add</a>
+            @can('update', $task)
+                <a href="{{ $task->status ? route('tasks.create', ['id' => $task->id, 'status' => $task->status]) : '#' }}" class="material-icons task-progress-card-top-editt">add</a>
+            @endcan
         </div>
     </div>
     <div>

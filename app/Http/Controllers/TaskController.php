@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class TaskController extends Controller
 {
@@ -40,12 +41,6 @@ class TaskController extends Controller
         $task = Task::find($id);
         Gate::authorize('update', $task); // Ditambahkan
         return view('tasks.edit', ['pageTitle' => $pageTitle, 'task' => $task]);
-        $pageTitle = 'Task List';
-        $tasks = Task::all();
-        return view('tasks.index', [
-            'pageTitle' => $pageTitle,
-            'tasks' => $tasks,
-        ]);
     }
 
 
@@ -149,7 +144,11 @@ class TaskController extends Controller
 
     public function complete($id)
     {
+
         $task = Task::findOrFail($id);
+        if (Gate::denies('performAsTaskOwner', $task)) {
+            Gate::authorize('updateAnyTask', Task::class);
+        }
         $task->status = 'completed';
         $task->save();
 
@@ -159,6 +158,9 @@ class TaskController extends Controller
     public function completee($id)
     {
         $task = Task::findOrFail($id);
+        if (Gate::denies('performAsTaskOwner', $task)) {
+            Gate::authorize('updateAnyTask', Task::class);
+        }
         $task->status = 'completed';
         $task->save();
 
