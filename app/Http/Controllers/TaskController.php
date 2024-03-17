@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\TaskFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -52,20 +54,48 @@ class TaskController extends Controller
                 'detail' => 'required',
                 'due_date' => 'required',
                 'status' => 'required',
+                'file' => ['max:5000', 'mimes:pdf,jpeg,png'], // Ditambahkan
+            ],
+            // Tambahkan pesan error
+            [
+                'file.max' => 'The file size exceed 5 mb',
+                'file.mimes' => 'Must be a file of type: pdf,jpeg,png,jpg',
             ],
             $request->all()
         );
 
-        $task = new Task([
-            'name' => $request->name,
-            'detail' => $request->detail,
-            'due_date' => $request->due_date,
-            'status' => $request->status,
-            'user_id' => Auth::user()->id, // Ditambahkan
-        ]);
+        DB::beginTransaction();
+        try {
+            $task = Task::create([
+                'name' => $request->name,
+                'detail' => $request->detail,
+                'due_date' => $request->due_date,
+                'status' => $request->status,
+                'user_id' => Auth::user()->id, // Ditambahkan
+            ]);
+            $file = $request->file('file');
+                if ($file) {
+                    $filename = $file->getClientOriginalName();
+                    $path = $file->storePubliclyAs(
+                        'tasks',
+                        $file->hashName(),
+                        'public'
+                    );
 
-        $task->save();
-
+                    TaskFile::create([
+                        'task_id' => $task->id,
+                        'filename' => $filename,
+                        'path' => $path,
+                    ]);
+                }
+            DB::commit();
+            $task->save();
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            return redirect()
+            ->route('tasks.create')
+            ->with('error', $th->getMessage());
+        }
         return redirect()->route('tasks.index');
     }
 
@@ -86,7 +116,6 @@ class TaskController extends Controller
         $task->due_date = $request->input('due_date');
         $task->status = $request->input('status');
         $task->save();
-
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully');
     }
 

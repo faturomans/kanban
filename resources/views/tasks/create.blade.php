@@ -3,7 +3,7 @@
 @section('main')
   <div class="form-container">
     <h1 class="form-title">{{ $pageTitle }}</h1>
-    <form class="form" method="POST" action="{{ route('tasks.store') }}">
+    <form class="form" method="POST" action="{{ route('tasks.store') }}" enctype="multipart/form-data">
       @csrf
       <div class="form-item">
         <label>Name:</label>
@@ -45,6 +45,16 @@
           <div class="alert-danger">{{ $message }}</div>
         @enderror
       </div>
+       <!-- Tambahkan field file upload-->
+       <div class="form-item">
+        <label>File:</label>
+        <input class="form-input" type="file" value="{{ old('file') }}" name="file">
+
+        @error('file')
+          <div class="alert-danger">{{ $message }}</div>
+        @enderror
+      </div>
+     <!-- Sampai di sini -->
       <button type="submit" class="form-button">Submit</button>
     </form>
   </div>

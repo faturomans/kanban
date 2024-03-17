@@ -17,7 +17,7 @@
         <div class="task-list-header-detail">Detail</div>
         <div class="task-list-header-due-date">Due Date</div>
         <div class="task-list-header-progress">Progress</div>
-        <!-- Tambahkan code ini -->
+        <div class="task-list-header-progress">File</div>
         <div class="task-list-header-owner-name">Owner</div>
     </div>
 
@@ -48,6 +48,15 @@
               Not Started
           @endswitch
             </div>
+             <!-- Tambahkan code di bawah -->
+        <div class="table-body-file">
+            @foreach ($task->files as $file)
+              <a href="{{ route('tasks.files.show', ['task_id' => $task->id, 'id' => $file->id]) }}">
+                {{ $file->filename }}</a>
+            @endforeach
+          </div>
+          <!-- Sampai di sini -->
+
             <div class="table-body-owner-name">{{ $task->user->name }}</div>
             <!-- Ditambahkan -->
             <div class="table-body-links">
