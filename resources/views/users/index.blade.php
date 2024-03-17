@@ -18,11 +18,14 @@
           <div class="table-body-user-role">
               {{ $user->role ? $user->role->name : 'No Role'}}
           </div>
-          <div class="table-body-link">
-            <a href="{{ route('users.editRole', ['id' => $user->id]) }}">
-              Edit Role
-            </a>
-          </div>
+          @if(auth()->user()->role && auth()->user()->role->name === 'admin')
+            <div class="table-body-link">
+                <a href="{{ route('users.editRole', ['id' => $user->id]) }}">
+                    Edit Role
+                </a>
+            </div>
+        @endif
+
         </div>
       @endforeach
     </div>

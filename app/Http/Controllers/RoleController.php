@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use App\Models\Permission; // Ditambahkan
 use Illuminate\Support\Facades\DB; // Ditambahkan
-use Illuminate\Http\Request;
 
 class RoleController extends Controller
 {
@@ -13,12 +14,13 @@ class RoleController extends Controller
     {
         $pageTitle = 'Role Lists';
         $roles = Role::all();
-
+        Gate::authorize('viewAny', Role::class);
         return view('roles.index', [
             'pageTitle' => $pageTitle,
             'roles' => $roles,
         ]);
     }
+
 
     public function create()
     {
@@ -54,10 +56,11 @@ class RoleController extends Controller
         }
     }
 
-        public function edit($id)
+    public function edit($id)
     {
-        $pageTitle = 'Edit Role';
         $role = Role::findOrFail($id);
+        $pageTitle = 'Edit Role';
+        Gate::authorize('update', $role);
         $permissions = Permission::all();
 
         return view('roles.edit', [
@@ -66,6 +69,7 @@ class RoleController extends Controller
             'permissions' => $permissions,
         ]);
     }
+
 
 
     public function update($id, Request $request)
@@ -91,6 +95,7 @@ class RoleController extends Controller
     {
         $pageTitle = 'Delete Role';
         $role = Role::findOrFail($id);
+        Gate::authorize('delete', $role); // Ditambahkan
         $permissions = Permission::all();
 
         return view('roles.delete', [

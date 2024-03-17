@@ -6,11 +6,18 @@
   <div class="task-list-container">
     <h1 class="task-list-heading">{{ $pageTitle }}</h1>
     <div class="task-list-task-buttons">
-      <a href="{{ route('roles.create') }}">
-        <button  class="task-list-button">
-          <span class="material-icons">add</span>Add Role
-        </button>
-      </a>
+
+    @php
+        $userRole = auth()->user()->role;
+    @endphp
+
+    @if($userRole && $userRole->name === 'admin')
+        <a href="{{ route('roles.create') }}">
+            <button class="task-list-button">
+                <span class="material-icons">add</span>Add Role
+            </button>
+        </a>
+    @endif
     </div>
 
     <div>
@@ -33,11 +40,12 @@
             @endforeach
           </ul>
         </div>
+        @if($userRole && $userRole->name === 'admin')
         <div class="table-body-links">
-          <a href="{{ route('roles.edit', ['id' => $role->id]) }}">Edit</a>
-          <a href="{{ route('roles.delete', ['id' => $role->id]) }}">Delete</a>
+            <a href="{{ route('roles.edit', ['id' => $role->id]) }}">Edit</a>
+            <a href="{{ route('roles.delete', ['id' => $role->id]) }}">Delete</a>
         </div>
-        </div>
+        @endif
       @endforeach
     </div>
   </div>

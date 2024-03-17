@@ -14,15 +14,29 @@
         <p class="sidebar-text">Task Progress</p>
       </a>
 
-      <a class="sidebar-link" href="{{ route('roles.index') }}">
-        <span class="material-icons sidebar-icon">settings</span>
-        <p class="sidebar-text">Roles</p>
-      </a>
+    @php
+        $user = auth()->user();
+    @endphp
 
-      <a class="sidebar-link" href="{{ route('users.index') }}">
-        <span class="material-icons sidebar-icon">group</span>
-        <p class="sidebar-text">Users</p>
-      </a>
+    @if($user && $user->role)
+        @php
+            $userRole = $user->role;
+        @endphp
+        <a class="sidebar-link" href="{{ route('roles.index') }}">
+            <span class="material-icons sidebar-icon">settings</span>
+            <p class="sidebar-text">Roles</p>
+        </a>
+    @endif
+
+    @if($user && $user->role)
+    @php
+        $userRole = $user->role;
+    @endphp
+        <a class="sidebar-link" href="{{ route('users.index') }}">
+            <span class="material-icons sidebar-icon">group</span>
+            <p class="sidebar-text">Users</p>
+        </a>
+    @endif
       @if (Auth::check())
       <a class="sidebar-link" href=""
         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -30,7 +44,6 @@
         <p class="sidebar-text">Logout</p>
       </a>
       <form id="logout-form" action="{{ route('auth.logout') }}" method="POST" style="display: none;">
-
         @csrf
       </form>
     @endif
